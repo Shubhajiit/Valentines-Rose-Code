@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Romantic Music Player</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        .handwritten {
+            font-family: 'Dancing Script', cursive;
+        }
+        #heartRain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+        .heart {
+            position: fixed;
+            top: -20px;
+            font-size: 24px;
+            color: rgba(255, 105, 180, 0.7);
+            text-shadow: 0 0 5px rgba(255, 105, 180, 0.3);
+            animation: fall linear forwards;
+            z-index: 1;
+        }
+        @keyframes fall {
+            from { transform: translateY(0) translateX(0) rotate(0deg); }
+            to { transform: translateY(100vh) translateX(calc(var(--wind) * 200px)) rotate(360deg); }
+        }
+        .song-tree li {
+            margin: 10px 0;
+            position: relative;
+        }
+        .song-tree li::before {
+            content: '';
+            position: absolute;
+            left: -20px;
+            top: 50%;
+            width: 15px;
+            height: 2px;
+            background: #ec4899;
+        }
+        @keyframes popup {
+            0% { transform: scale(0); opacity: 0; }
+            70% { transform: scale(1.1); opacity: 0.7; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .popup-message {
+            animation: popup 0.5s ease-out forwards;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-pink-50 via-red-50 to-pink-100">
+    <div id="heartRain"></div>
+
+    <div class="container mx-auto px-4 py-12 relative z-10">
+        <!-- Message Popup -->
+        <div id="message" class="fixed inset-0 flex items-center justify-center z-50 hidden">
+            <div class="bg-white/90 backdrop-blur-lg p-8 rounded-2xl shadow-2xl popup-message max-w-lg w-full mx-4">
+                <h2 class="text-4xl text-pink-600 mb-4 text-center handwritten">This is for you Madam ji! 💝</h2>
+                <p class="text-gray-700 text-center mb-6">Listen to these romantic melodies picked just for you 🎵</p>
+                <div class="flex justify-center">
+                    <button onclick="closeMessage()" class="px-6 py-3 bg-gradient-to-r from-pink-500 to-rose-500 text-white rounded-xl hover:from-pink-600 hover:to-rose-600 transition-all duration-300">
+                        Let's Play Music ✨
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Music Player -->
+        <div class="bg-white/90 backdrop-blur-lg rounded-2xl p-8 shadow-2xl max-w-4xl mx-auto">
+            <h1 class="text-4xl font-bold text-pink-600 mb-8 text-center handwritten">Romantic Playlist 🎵</h1>
+
+            <!-- Song Categories -->
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Love Songs -->
+                <div class="space-y-4">
+                    <h2 class="text-2xl text-pink-500 mb-4 handwritten">Love Songs 💕</h2>
+                    <ul class="song-tree pl-6 space-y-4">
+                        <li class="transform hover:-translate-y-1 transition-transform duration-300">
+                            <button class="flex items-center space-x-3 w-full p-3 rounded-xl bg-pink-50 hover:bg-pink-100 transition-colors">
+                                <span>🎵</span>
+                                <span class="flex-1">Perfect - Ed Sheeran</span>
+                                <span>💝</span>
+                            </button>
+                        </li>
+                        <li class="transform hover:-translate-y-1 transition-transform duration-300">
+                            <button class="flex items-center space-x-3 w-full p-3 rounded-xl bg-pink-50 hover:bg-pink-100 transition-colors">
+                                <span>🎵</span>
+                                <span class="flex-1">All of Me - John Legend</span>
+                                <span>💖</span>
+                            </button>
+                        </li>
+                        <li class="transform hover:-translate-y-1 transition-transform duration-300">
+                            <button class="flex items-center space-x-3 w-full p-3 rounded-xl bg-pink-50 hover:bg-pink-100 transition-colors">
+                                <span>🎵</span>
+                                <span class="flex-1">Pookie - Romantic Mix</span>
+                                <span>💘</span>
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Romantic Ballads -->
+                <div class="space-y-4">
+                    <h2 class="text-2xl text-pink-500 mb-4 handwritten">Romantic Ballads 🌹</h2>
+                    <ul class="song-tree pl-6 space-y-4">
+                        <li class="transform hover:-translate-y-1 transition-transform duration-300">
+                            <button class="flex items-center space-x-3 w-full p-3 rounded-xl bg-pink-50 hover:bg-pink-100 transition-colors">
+                                <span>🎵</span>
+                                <span class="flex-1">Can't Help Falling in Love</span>
+                                <span>💫</span>
+                            </button>
+                        </li>
+                        <li class="transform hover:-translate-y-1 transition-transform duration-300">
+                            <button class="flex items-center space-x-3 w-full p-3 rounded-xl bg-pink-50 hover:bg-pink-100 transition-colors">
+                                <span>🎵</span>
+                                <span class="flex-1">At Last - Etta James</span>
+                                <span>✨</span>
+                            </button>
+                        </li>
+                        <li class="transform hover:-translate-y-1 transition-transform duration-300">
+                            <button class="flex items-center space-x-3 w-full p-3 rounded-xl bg-pink-50 hover:bg-pink-100 transition-colors">
+                                <span>🎵</span>
+                                <span class="flex-1">La Vie En Rose</span>
+                                <span>🌟</span>
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Player Controls -->
+            <div class="mt-12 p-6 bg-pink-50 rounded-xl">
+                <div class="flex flex-col items-center space-y-4">
+                    <h3 id="nowPlaying" class="text-xl text-pink-600 handwritten">Select a song to play</h3>
+                    <div class="flex items-center space-x-6">
+                        <button class="p-3 rounded-full bg-pink-500 text-white hover:bg-pink-600 transition-colors">
+                            ⏮️
+                        </button>
+                        <button id="playPause" class="p-4 rounded-full bg-gradient-to-r from-pink-500 to-rose-500 text-white hover:from-pink-600 hover:to-rose-600 transition-all duration-300 transform hover:scale-110">
+                            ▶️
+                        </button>
+                        <button class="p-3 rounded-full bg-pink-500 text-white hover:bg-pink-600 transition-colors">
+                            ⏭️
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Heart rain animation
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.innerHTML = '❤';
+            heart.className = 'heart';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.setProperty('--wind', Math.random() * 2 - 1);
+            heart.style.animationDuration = (Math.random() * 3 + 2) + 's';
+            heart.style.opacity = Math.random() * 0.5 + 0.5;
+            heart.style.transform = `scale(${Math.random() * 0.5 + 0.5})`;
+            document.getElementById('heartRain').appendChild(heart);
+            
+            setTimeout(() => heart.remove(), 5000);
+        }
+        setInterval(createHeart, 300);
+
+        // Show welcome message on page load
+        window.onload = function() {
+            document.getElementById('message').classList.remove('hidden');
+        }
+
+        function closeMessage() {
+            document.getElementById('message').classList.add('hidden');
+        }
+
+        // Add click handlers for all song buttons
+        document.querySelectorAll('.song-tree button').forEach(button => {
+            button.addEventListener('click', function() {
+                const songName = this.querySelector('span:nth-child(2)').textContent;
+                document.getElementById('nowPlaying').textContent = `Now Playing: ${songName} 🎵`;
+                
+                // Visual feedback
+                this.classList.add('bg-pink-200');
+                setTimeout(() => this.classList.remove('bg-pink-200'), 200);
+            });
+        });
+
+        // Toggle play/pause
+        let isPlaying = false;
+        document.getElementById('playPause').addEventListener('click', function() {
+            isPlaying = !isPlaying;
+            this.textContent = isPlaying ? '⏸️' : '▶️';
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pookie Love Card Creator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        @keyframes sparkle {
+            0%, 100% { opacity: 0; transform: scale(0); }
+            50% { opacity: 1; transform: scale(1); }
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+        
+        @keyframes write {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+        
+        @keyframes glow {
+            0%, 100% { text-shadow: 0 0 5px #ff69b4, 0 0 10px #ff69b4; }
+            50% { text-shadow: 0 0 20px #ff69b4, 0 0 30px #ff69b4; }
+        }
+        
+        .sparkle {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: radial-gradient(circle, #ffd700 20%, transparent 70%);
+            animation: sparkle 2s infinite;
+        }
+        
+        .petal {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(circle at 70% 70%, #ffb6c1 20%, #ff69b4 100%);
+            border-radius: 50% 0 50% 50%;
+            animation: float 4s infinite;
+        }
+        
+        .handwritten {
+            font-family: 'Dancing Script', cursive;
+        }
+        
+        .writing-animation {
+            overflow: hidden;
+            white-space: nowrap;
+            animation: write 2s steps(40, end);
+        }
+        
+        .neon-glow {
+            animation: glow 2s infinite;
+        }
+        
+        .stamp {
+            transform: rotate(-15deg);
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+        
+        .stamp.show {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-pink-50 via-red-50 to-pink-100">
+    <!-- Card Creator Container -->
+    <div class="container mx-auto px-4 py-12">
+        <h1 class="text-4xl text-pink-600 text-center mb-8 handwritten neon-glow">Create Your Pookie Love Card 💝</h1>
+        
+        <!-- Card Preview -->
+        <div class="max-w-2xl mx-auto bg-white/90 backdrop-blur-lg rounded-3xl p-8 shadow-2xl relative overflow-hidden">
+            <!-- Floating Petals -->
+            <div id="petals"></div>
+            
+            <!-- Card Content -->
+            <div class="relative z-10 space-y-6">
+                <!-- Recipient Name Input -->
+                <div class="mb-6">
+                    <label class="block text-pink-600 mb-2 handwritten text-xl">To My Dearest</label>
+                    <input type="text" 
+                           id="recipientName" 
+                           class="w-full p-3 border-2 border-pink-200 rounded-xl focus:ring-2 focus:ring-pink-400 focus:border-transparent handwritten text-xl"
+                           placeholder="Enter your pookie's name">
+                </div>
+                
+                <!-- Love Message Input -->
+                <div class="mb-6">
+                    <label class="block text-pink-600 mb-2 handwritten text-xl">Your Love Message</label>
+                    <textarea id="loveMessage" 
+                              class="w-full p-4 border-2 border-pink-200 rounded-xl focus:ring-2 focus:ring-pink-400 focus:border-transparent handwritten text-lg" 
+                              rows="4"
+                              placeholder="Write your heartfelt message..."></textarea>
+                </div>
+                
+                <!-- Love Stamp -->
+                <div class="stamp absolute bottom-4 right-4 bg-pink-600/20 rounded-full p-4 handwritten text-pink-600">
+                    Sent with Love ❤️
+                </div>
+                
+                <!-- Pookie Bear -->
+                <div class="absolute top-4 right-4 animate-bounce">
+                    🧸
+                </div>
+                
+                <!-- Watermark -->
+                <div class="absolute bottom-2 left-4 text-pink-300/50 text-sm handwritten">
+                    You're my forever Valentine 💖
+                </div>
+            </div>
+        </div>
+        
+        <!-- Download Options -->
+        <div class="max-w-2xl mx-auto mt-8 space-y-4">
+            <div class="flex flex-wrap gap-4 justify-center">
+                <button onclick="downloadCard('png')" 
+                        class="px-6 py-3 bg-gradient-to-r from-pink-500 to-rose-500 text-white rounded-xl hover:from-pink-600 hover:to-rose-600 transition-all duration-300 transform hover:-translate-y-1">
+                    Download as Image 🖼️
+                </button>
+                <button onclick="downloadCard('gif')"
+                        class="px-6 py-3 bg-gradient-to-r from-pink-500 to-rose-500 text-white rounded-xl hover:from-pink-600 hover:to-rose-600 transition-all duration-300 transform hover:-translate-y-1">
+                    Download as GIF 💝
+                </button>
+                <button onclick="generateQR()"
+                        class="px-6 py-3 bg-gradient-to-r from-pink-500 to-rose-500 text-white rounded-xl hover:from-pink-600 hover:to-rose-600 transition-all duration-300 transform hover:-translate-y-1">
+                    Generate QR Code 📱
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Popup -->
+    <div id="successPopup" class="fixed inset-0 flex items-center justify-center z-50 hidden">
+        <div class="bg-white/90 backdrop-blur-lg p-8 rounded-2xl shadow-2xl max-w-md mx-4 text-center">
+            <h2 class="text-3xl text-pink-600 mb-4 handwritten">Pookie, your love card is ready! 💖</h2>
+            <p class="text-gray-600 mb-6">Your message of love has been captured perfectly!</p>
+            <button onclick="closePopup()" 
+                    class="px-6 py-3 bg-gradient-to-r from-pink-500 to-rose-500 text-white rounded-xl hover:from-pink-600 hover:to-rose-600 transition-all duration-300">
+                Close ✨
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Create floating petals
+        function createPetals() {
+            const petalsContainer = document.getElementById('petals');
+            for (let i = 0; i < 10; i++) {
+                const petal = document.createElement('div');
+                petal.className = 'petal';
+                petal.style.left = `${Math.random() * 100}%`;
+                petal.style.top = `${Math.random() * 100}%`;
+                petal.style.animationDelay = `${Math.random() * 4}s`;
+                petalsContainer.appendChild(petal);
+            }
+        }
+
+        // Create sparkles
+        function createSparkle() {
+            const card = document.querySelector('.bg-white\\/90');
+            const sparkle = document.createElement('div');
+            sparkle.className = 'sparkle';
+            sparkle.style.left = `${Math.random() * 100}%`;
+            sparkle.style.top = `${Math.random() * 100}%`;
+            card.appendChild(sparkle);
+            setTimeout(() => sparkle.remove(), 2000);
+        }
+
+        // Download card function
+        function downloadCard(type) {
+            const button = event.target;
+            const originalText = button.textContent;
+            
+        }
